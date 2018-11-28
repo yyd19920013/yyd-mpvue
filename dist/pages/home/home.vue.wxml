@@ -1,6 +1,0 @@
-<import src="/components/swiperWrap.vue.wxml" />
-<import src="/components/pickerWrap.vue.wxml" /><template name="48bd3114">
-  <view class="_div data-v-0e7c7666 home"><template data="{{...$root[$kk+'0'], $root, $slotdefault:'data-v-0e7c7666-default-0'}}" is="0e5e56d8"></template> <template data="{{...$root[$kk+'1'], $root}}" is="46f940ee"></template> <template data="{{...$root[$kk+'2'], $root}}" is="46f940ee"></template> <template data="{{...$root[$kk+'3'], $root}}" is="46f940ee"></template> <template data="{{...$root[$kk+'4'], $root}}" is="46f940ee"></template> <template data="{{...$root[$kk+'5'], $root}}" is="46f940ee"></template> <template data="{{...$root[$kk+'6'], $root}}" is="46f940ee"></template> <template data="{{...$root[$kk+'7'], $root}}" is="46f940ee"></template>
-    <view bindtap="handleProxy" data-eventid="{{'0'}}" data-comkey="{{$k}}" class="_div data-v-0e7c7666">跳转</view>
-  </view>
-</template>

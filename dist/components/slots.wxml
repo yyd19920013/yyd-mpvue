@@ -1,4 +1,0 @@
-<import src="/components/swiperWrap.vue.wxml" />
-<import src="/components/pickerWrap.vue.wxml" /><template name="data-v-0e7c7666-default-0">
-  <view class="_div data-v-0e7c7666">111111111111111</view>
-</template>
