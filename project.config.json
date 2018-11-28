@@ -10,7 +10,7 @@
 	"miniprogramRoot": "dist/",
 	"compileType": "miniprogram",
 	"appid": "wxcbeeb469e96e883e",
-	"projectname": "mpvueStarter",
+	"projectname": "yyd-mpvue",
 	"condition": {
 		"search": {
 			"current": -1,
