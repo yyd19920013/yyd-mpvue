@@ -1,0 +1,11 @@
+<template name="0e5e56d8">
+  <view class="_div data-v-0007855d swiperWrap">
+    <swiper class="_swiper data-v-0007855d swiper" indicator-dots="{{showDot}}" indicator-color="{{dotColor}}" indicator-active-color="{{dotActiveColor}}" autoplay="{{auto}}" interval="{{interval}}" duration="{{duration}}" style=" {{('width:' + cWidth + ';' + 'height:' + (height + 'rpx') + ';')}}">
+      <block wx:key="index" key="{{index}}" wx:for="{{dataList}}" wx:for-index="index" wx:for-item="item">
+        <swiper-item class="_swiper-item data-v-0007855d">
+          <image class="_img data-v-0007855d img" bindtap="handleProxy" data-eventid="{{'0-'+index}}" data-comkey="{{$k}}" style=" {{(  'width:' +  cWidth +  ';' +  'height:' +  (height + 'rpx') +  ';' +  'background-image:' +  ('url(' + item.src + ')') +  ';')}}"></image>
+        </swiper-item>
+      </block>
+    </swiper>
+  </view>
+</template>

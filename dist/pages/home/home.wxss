@@ -1,0 +1,12 @@
+
+.swiperWrap .swiper.data-v-0007855d,
+.swiperWrap .img.data-v-0007855d {
+  width: 100%;
+}
+.swiperWrap .img.data-v-0007855d {
+  background: url("") no-repeat center top;
+  background-size: cover;
+}
+.pickerWrap .picker.data-v-38a26f73 {
+  min-height: 30rpx;
+}
