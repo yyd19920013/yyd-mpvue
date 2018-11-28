@@ -1,0 +1,27 @@
+{
+    "pages": [],
+    "window": {
+        "backgroundTextStyle": "light",
+        "navigationBarBackgroundColor": "#fff",
+        "navigationBarTitleText": "我的小程序",
+        "navigationBarTextStyle": "black"
+    },
+    "tabBar": {
+        "color": "#999",
+        "selectedColor": "#09f",
+        "list": [
+                {
+                    "pagePath": "pages/home/home",
+                    "text": "首页",
+                    "iconPath": "static/images/home-icon.png",
+                    "selectedIconPath": "static/images/home-active-icon.png"
+                },
+                {
+                    "pagePath": "pages/user/user",
+                    "text": "我的",
+                    "iconPath": "static/images/user-icon.png",
+                    "selectedIconPath": "static/images/user-active-icon.png"
+                }
+            ]
+    }
+}

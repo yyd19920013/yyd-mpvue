@@ -1,0 +1,15 @@
+.DS_Store
+
+node_modules/
+
+.idea/
+
+
+yarn.lock
+
+package-lock.json
+
+*.log
+
+*.bak
+
