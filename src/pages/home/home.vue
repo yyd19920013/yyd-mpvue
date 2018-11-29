@@ -75,7 +75,7 @@
 <script>
 import swiperWrap from 'components/swiperWrap';
 import pickerWrap from 'components/pickerWrap';
-import {wxGetLocation,resetData,copyJson} from 'js/yydjs';
+import {wxGetLocation,resetData,copyJson,wxToast} from 'js/yydjs';
 import {testAxios} from 'services';
 
 const resetDataFn=resetData({
@@ -123,6 +123,8 @@ export default{
                 console.log(res,detail);
             },
         });
+
+        wxToast('提示');
     },
 
     methods:{

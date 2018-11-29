@@ -236,17 +236,13 @@ function wxAnimation(option){
 };
 
 //微信小程序-toast
-function wxToast(str,msec){
-    wx.hideToast();
+function wxToast(title,duration){
     wx.showToast({
-        title:str,
+        title:title,
         mask:true,
         icon:'none',
+        duration:duration||3000,
     });
-
-    setTimeout(function(){
-        wx.hideToast();
-    },msec||3000);
 };
 
 //微信小程序-分享
