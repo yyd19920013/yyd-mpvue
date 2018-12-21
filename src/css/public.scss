@@ -1,3 +1,14 @@
+@charset"utf-8";
+/* CSS Document */
+
+/*sass定义*/
+/*计算单位函数*/
+@function unit($num){
+    $scale: 1;//缩放比例
+
+    @return #{if($num == 1, 1, $num * $scale)}rpx;
+}
+
 /*公共变量*/
 $main: #1e59c0;//视觉主色
 $minor: #a8b7c7;//次色
