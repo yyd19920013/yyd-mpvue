@@ -54,28 +54,29 @@ function getAge(date,real){
 //月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符，
 //年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字)
 //例子：
-//dateFormat0(new Date(),'yyyy-MM-dd hh:mm:ss.S') ==> 2006-07-02 08:09:04.423
-//dateFormat0(new Date(),'yyyy-M-d h:m:s.S')      ==> 2006-7-2 8:9:4.18
+//dateFormat0(new Date(),'yyyy-MM-dd hh:mm:ss.S')，2018-12-21 17:24:33.664
+//dateFormat0(new Date(),'y-M-d h:m:s.S/q')，2018-12-21 17:24:33.666/4
 function dateFormat0(oDate,fmt){
     var fmt=fmt||'yyyy/MM/dd hh:mm:ss';
-    var oDate=normalDate(oDate);
+    var oDate=normalDate(oDate||new Date());
     var date={
-        "M+":oDate.getMonth()+1,                 //月份
-        "d+":oDate.getDate(),                    //日
-        "h+":oDate.getHours(),                   //小时
-        "m+":oDate.getMinutes(),                 //分
-        "s+":oDate.getSeconds(),                 //秒
-        "q+":Math.floor((oDate.getMonth()+3)/3), //季度，+3为了好取整
-        "S":oDate.getMilliseconds()              //毫秒
+        'y+':oDate.getFullYear(),              //年
+        'M+':oDate.getMonth()+1,               //月
+        'd+':oDate.getDate(),                  //日
+        'h+':oDate.getHours(),                 //时
+        'm+':oDate.getMinutes(),               //分
+        's+':oDate.getSeconds(),               //秒
+        'S':oDate.getMilliseconds(),           //毫秒
+        'q+':Math.ceil((oDate.getMonth()+1)/3),//季度，+3为了好取整
     };
-
-    if(/(y+)/.test(fmt)){//RegExp.$1(正则表达式的第一个匹配，一共有99个匹配)
-        fmt=fmt.replace(RegExp.$1,(oDate.getFullYear()+'').substr(4-RegExp.$1.length));
-    }
+    var result='';
+    var value='';
 
     for(var attr in date){
         if(new RegExp('('+attr+')').test(fmt)){
-            fmt=fmt.replace(RegExp.$1,RegExp.$1.length==1?date[attr]:('00'+date[attr]).substring((date[attr]+'').length));
+            result=RegExp.$1;
+            value=date[attr]+'';
+            fmt=fmt.replace(result,result.length==1?value:(attr=='y+'?value.substring(4-result.length):toTwo(value)));
         }
     }
 
