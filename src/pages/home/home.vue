@@ -3,15 +3,15 @@
         <swiperWrap
             :dataList="[
                 {
-                    src:'http://img02.tooopen.com/images/20150928/tooopen_sy_143912755726.jpg',
+                    src:'http://pic1.win4000.com/wallpaper/7/53bce10032f18.jpg',
                     link:'../user/user',
                 },
                 {
-                    src:'http://img02.tooopen.com/images/20150928/tooopen_sy_143912755726.jpg',
+                    src:'http://pic1.win4000.com/wallpaper/7/53bce10032f18.jpg',
                     link:'../user/user',
                 },
                 {
-                    src:'http://img02.tooopen.com/images/20150928/tooopen_sy_143912755726.jpg',
+                    src:'http://pic1.win4000.com/wallpaper/7/53bce10032f18.jpg',
                     link:'../user/user',
                 },
             ]"
