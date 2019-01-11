@@ -27,7 +27,7 @@ module.exports = {
       : config.dev.assetsPublicPath
   },
   resolve: {
-    extensions: ['.js', '.vue', '.json', '.less', '.css', '.scss'],
+    extensions: ['.js', '.vue', '.json'],
     alias: {
       'vue': 'mpvue',
       '@': resolve('src'),
