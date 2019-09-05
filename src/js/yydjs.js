@@ -23,7 +23,7 @@ function Type(obj){
 
 //json克隆副本
 function copyJson(json){
-    return json?JSON.parse(JSON.stringify(json)):'';
+    return json?JSON.parse(JSON.stringify(json)):json;
 };
 
 //正常化日期
@@ -42,10 +42,90 @@ function normalDate(oDate){
 
 //根据出生日期获取年龄
 function getAge(date,real){
-    var diff=(new Date()-normalDate(date))/(1000*60*60*24*365);
+    var bDate=normalDate(date);
+    var bYear=bDate.getFullYear();
+    var bMonth=bDate.getMonth();
+    var bDay=bDate.getDate();
+    var nDate=new Date();
+    var nYear=nDate.getFullYear();
+    var nMonth=nDate.getMonth();
+    var nDay=nDate.getDate();
+    var dYear=nYear-bYear;
+    var dMonth=(nMonth-bMonth)/12;
+    var dDay=(nDay-bDay)/365;
+    var diff=dYear+dMonth+dDay;
     var age=diff>0?(real?diff:Math.floor(diff)):0;
 
     return age;
+};
+
+//时间格式化函数（根据秒数来格式化）
+//seconds（多少秒）
+//fmt（格式匹配）
+//adjustFmt（是否自动调整格式，会删除无效的格式）
+//年(y)、月(M)、日(d)、小时(h)、分(m)、秒(s)，都可以用1到任意位占位符
+/*
+    例子：
+    secondFormat0(86400*365+86400*30+86400+3600+60+1,'yy/MM/dd hh:mm:ss'); //01/01/01 01:01:01
+    secondFormat0(86400+3600+60+1,'hh:mm:ss'); //25:01:01
+*/
+function secondFormat0(seconds,fmt,adjustFmt){
+    var fmt=fmt||'yy/MM/dd hh:mm:ss';
+    var aMinute=60;
+    var aHour=aMinute*60;
+    var aDay=aHour*24;
+    var aMonth=aDay*30;
+    var aYear=aDay*365;
+
+    var iYears=Math.floor(seconds/aYear);
+    var dMonth=seconds-iYears*aYear>0?seconds-iYears*aYear:0;
+    dMonth=~fmt.indexOf('y')?dMonth:seconds;
+    var iMonths=Math.floor(dMonth/aMonth);
+    var dDay=dMonth-iMonths*aMonth>0?dMonth-iMonths*aMonth:0;
+    dDay=~fmt.indexOf('M')?dDay:seconds;
+    var iDays=Math.floor(dDay/aDay);
+    var dHour=dDay-iDays*aDay>0?dDay-iDays*aDay:0;
+    dHour=~fmt.indexOf('d')?dHour:seconds;
+    var iHours=Math.floor(dHour/aHour);
+    var dMinutes=dHour-iHours*aHour>0?dHour-iHours*aHour:0;
+    dMinutes=~fmt.indexOf('h')?dMinutes:seconds;
+    var iMinutes=Math.floor(dMinutes/aMinute);
+    var dSeconds=dMinutes-iMinutes*aMinute?dMinutes-iMinutes*aMinute:0;
+    dSeconds=~fmt.indexOf('m')?dSeconds:seconds;
+    var iSeconds=Math.floor(dSeconds);
+
+    var time={
+        'y+':iYears,
+        'M+':iMonths,
+        'd+':iDays,
+        'h+':iHours,
+        'm+':iMinutes,
+        's+':iSeconds,
+    };
+    var result='';
+    var value='';
+
+    for(var attr in time){
+        if(new RegExp('('+attr+')').test(fmt)){
+            result=RegExp.$1;
+            value=time[attr]+'';
+            value=result.length==1?value:zeroFill(value,result.length-value.length);
+
+            if(adjustFmt&&(+value)===0){
+                var reg=new RegExp(attr+'([^a-zA-Z]+)[a-zA-Z]+');
+                var matchStr=fmt.match(reg);
+
+                if(matchStr){
+                    fmt=fmt.replace(matchStr[1],'');
+                    value='';
+                }
+            }
+
+            fmt=fmt.replace(result,value);
+        }
+    }
+
+    return fmt;
 };
 
 //日期格式化函数
@@ -53,9 +133,11 @@ function getAge(date,real){
 //fmt（格式匹配）
 //月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符，
 //年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字)
-//例子：
-//dateFormat0(new Date(),'yyyy-MM-dd hh:mm:ss.S')，2018-12-21 17:24:33.664
-//dateFormat0(new Date(),'y-M-d h:m:s.S/q')，2018-12-21 17:24:33.666/4
+/*
+    例子：
+    dateFormat0(new Date(),'yyyy-MM-dd hh:mm:ss.S'); //2018-12-21 17:24:33.664
+    dateFormat0(new Date(),'y-M-d h:m:s.S/q'); //2018-12-21 17:24:33.666/4
+*/
 function dateFormat0(oDate,fmt){
     var fmt=fmt||'yyyy/MM/dd hh:mm:ss';
     var oDate=normalDate(oDate||new Date());
@@ -85,8 +167,7 @@ function dateFormat0(oDate,fmt){
 
 //时间格式化(主要用于格式化历史时间到当前时间是多少秒到多少年前)
 //oDate（时间戳或字符串日期都支持）
-//fmt（格式匹配）
-function dateFormat1(oDate,fmt){
+function dateFormat1(oDate){
     var oDate=normalDate(oDate);
 
     if(+oDate>=+new Date()){
@@ -106,14 +187,105 @@ function dateFormat1(oDate,fmt){
         lookTime=minutes+'分钟前';
     }else if(hours<24){
         lookTime=hours+'小时前';
-    }else if(days<7){
+    }else if(days<30){
         lookTime=days+'天前';
-    }else if(days==7){
-        lookTime='一周前';
-    }else if(days>7){
-        lookTime=dateFormat0(oDate,fmt);
+    }else if(months<12){
+        lookTime=months+'个月前';
+    }else{
+        lookTime=years+'年前';
     }
     return lookTime;
+};
+
+//金额格式化
+function amountFormat0(value,dLength,cLength){
+    var oldValue=value;
+    var value=+value;
+    var arr=[];
+    var dLength=dLength||2;
+    var cLength=cLength||3;
+    var zero='';
+
+    for(var i=0;i<dLength;i++){
+        zero+='0';
+    }
+
+    if(Type(value)=='number'){
+        value+='';
+        value=value.split('.');
+        value[0]=value[0].split('');
+        value[1]=(value[1]||'')+zero;
+        value[1]=value[1].substring(0,dLength);
+
+        arr.unshift('.',value[1]);
+        while(value[0].length>cLength){
+            arr.unshift(',',value[0].splice(value[0].length-cLength,cLength).join(''));
+        }
+
+        arr=value[0].join('')+arr.join('');
+    }else{
+        arr=oldValue;
+    }
+
+    if(arr&&arr.length)arr=arr.replace('-,','-');
+    return arr;
+};
+
+//格式化手机号为344
+function formatMobile(val){
+    var reg=/^[1][3-9][0-9][ ][0-9]{4}[ ][0-9]{4}$/;
+    var reg1=/(\d{3})(?=\d)/;
+    var reg2=/(\d{4})(?=\d)/g;
+
+    if(!reg.test(val)){
+        val=val.replace(/\s/g,'');
+        val=val.replace(reg1, '$1 ');
+        val=val.replace(reg2, '$1 ');
+    }
+
+    return val;
+};
+
+//科学运算（解决js处理浮点不正确的问题）
+//num1（要进行运算的第一个数字）
+//operator（运算符号,+,-,*,/）
+//num2（要进行运算的第二个数字）
+function computed(num1,operator,num2){
+    var length1=(num1+'').split('.')[1];
+    length1=length1?length1.length:0;
+    var length2=(num2+'').split('.')[1];
+    length2=length2?length2.length:0;
+
+    var integer1=Math.pow(10,length1);
+    var integer2=Math.pow(10,length2);
+    var iMax=Math.max(integer1,integer2);
+    var result='';
+
+    switch(operator){
+        case '+':
+                num1=num1*iMax;
+                num2=num2*iMax;
+                result=(num1+num2)/iMax;
+            break;
+        case '-':
+                num1=num1*iMax;
+                num2=num2*iMax;
+                result=(num1-num2)/iMax;
+            break;
+        case '*':
+                num1=num1*integer1;
+                num2=num2*integer2;
+                result=(num1*num2)/integer1;
+                result=result/integer2;
+            break;
+        case '/':
+                num1=num1*integer1;
+                num2=num2*integer2;
+                result=(num1/num2)/integer1;
+                result=result/integer2;
+            break;
+    }
+    return result;
 };
 
 //生成32位唯一字符串(大小写字母数字组合)
@@ -356,11 +528,13 @@ export {
         copyJson,
         normalDate,
         getAge,
+        secondFormat0,
         dateFormat0,
         dateFormat1,
         customEvent,
         resetData,
         getCurrentPage,
+
         wxAnimation,
         wxToast,
         wxxcxShare,

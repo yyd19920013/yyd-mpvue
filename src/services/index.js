@@ -22,7 +22,7 @@ const API=(config)=>{
 };
 
 //axios请求示例
-const testAxios=(data,endFn)=>{
+const testWxRequest=(data,endFn)=>{
     API({
         url:URL+'/action2/AllProvince.ashx',
         method:'post',
@@ -36,5 +36,5 @@ const testAxios=(data,endFn)=>{
 export{
         URL,//域名
         API,//api请求函数
-        testAxios,//axios请求示例
+        testWxRequest,//wxRequest请求示例
     };
