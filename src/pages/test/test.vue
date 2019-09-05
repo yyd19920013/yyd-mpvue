@@ -69,7 +69,7 @@
         />
 
         <div :animation="animationData" class="animationData">
-            <button ref="bt" @click="clickFn">回首页</button>
+            <button @click="clickFn">回首页</button>
         </div>
     </div>
 </template>
