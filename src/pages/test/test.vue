@@ -26,6 +26,7 @@
         <div :animation="animationData" class="animationData">
             <button @click="clickFn">回首页</button>
         </div>
+        <van-button type="primary">主要按钮</van-button>
     </div>
 </template>
 <script>

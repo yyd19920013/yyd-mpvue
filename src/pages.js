@@ -8,6 +8,9 @@ module.exports = [{
         path: 'pages/test/test', //测试
         config: {
             navigationBarTitleText: '测试',
+            usingComponents: {
+                'van-button': '/static/vant/button/index',
+            },
         },
     },
     {
