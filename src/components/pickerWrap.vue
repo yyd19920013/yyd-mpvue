@@ -1,224 +1,144 @@
 <template>
     <div class="pickerWrap">
-        <picker
-            v-if="mode=='selector'"
-            mode="selector"
-            :value="value"
-            :rangeKey="selectorRangeKey"
-            :range="range"
-            :disabled="disabled"
-            @change="changeFn"
-            @cancel="cancelFn"
-        >
-            <div
-                class="picker"
-                v-if="!hideSlot"
-            >
+        <picker v-if="mode=='selector'" mode="selector" :value="value" :rangeKey="selectorRangeKey" :range="range" :disabled="disabled" @change="changeFn" @cancel="cancelFn">
+            <div class="picker" v-if="!hideSlot">
                 <span class="title">{{title||'普通选择器：'}}</span>
                 <span class="value">{{selectorValue}}</span>
             </div>
-            <div
-                class="picker selector"
-                v-else
-            ></div>
+            <div class="picker selector" v-else></div>
         </picker>
-
-        <picker
-            v-if="mode=='multiSelector'"
-            mode="multiSelector"
-            :value="!ganged?value:gangedValue"
-            :rangeKey="multiSelectorRangeKey"
-            :range="range"
-            :disabled="disabled"
-            @change="changeFn"
-            @columnchange="columnchangeFn"
-            @cancel="cancelFn"
-        >
-            <div
-                class="picker"
-                v-if="!hideSlot"
-            >
+        <picker v-if="mode=='multiSelector'" mode="multiSelector" :value="!ganged?value:gangedValue" :rangeKey="multiSelectorRangeKey" :range="range" :disabled="disabled" @change="changeFn" @columnchange="columnchangeFn" @cancel="cancelFn">
+            <div class="picker" v-if="!hideSlot">
                 <span class="title">{{title||'多列选择器：'}}</span>
                 <span class="value">{{!ganged?multiSelectorValue:cacheMultiSelectorValue}}</span>
             </div>
-            <div
-                class="picker multiSelector"
-                v-else
-            ></div>
+            <div class="picker multiSelector" v-else></div>
         </picker>
-
-        <picker
-            v-if="mode=='time'"
-            mode="time"
-            :value="value"
-            :start="start"
-            :end="end"
-            :disabled="disabled"
-            @change="changeFn"
-            @cancel="cancelFn"
-        >
-            <div
-                class="picker"
-                v-if="!hideSlot"
-            >
+        <picker v-if="mode=='time'" mode="time" :value="value" :start="start" :end="end" :disabled="disabled" @change="changeFn" @cancel="cancelFn">
+            <div class="picker" v-if="!hideSlot">
                 <span class="title">{{title||'时间选择器：'}}</span>
                 <span class="value">{{timeValue}}</span>
             </div>
-            <div
-                class="picker time"
-                v-else
-            ></div>
+            <div class="picker time" v-else></div>
         </picker>
-
-        <picker
-            v-if="mode=='date'"
-            mode="date"
-            :value="value"
-            :start="start"
-            :end="end"
-            :flieds="flieds"
-            :disabled="disabled"
-            @change="changeFn"
-            @cancel="cancelFn"
-        >
-            <div
-                class="picker"
-                v-if="!hideSlot"
-            >
+        <picker v-if="mode=='date'" mode="date" :value="value" :start="start" :end="end" :flieds="flieds" :disabled="disabled" @change="changeFn" @cancel="cancelFn">
+            <div class="picker" v-if="!hideSlot">
                 <span class="title">{{title||'日期选择器：'}}</span>
                 <span class="value">{{dateValue}}</span>
             </div>
-            <div
-                class="picker date"
-                v-else
-            ></div>
+            <div class="picker date" v-else></div>
         </picker>
-
-        <picker
-            v-if="mode=='region'"
-            mode="region"
-            :value="value"
-            :join="join"
-            :customItem="customItem"
-            :disabled="disabled"
-            @change="changeFn"
-            @cancel="cancelFn"
-        >
-            <div
-                class="picker"
-                v-if="!hideSlot"
-            >
+        <picker v-if="mode=='region'" mode="region" :value="value" :join="join" :customItem="customItem" :disabled="disabled" @change="changeFn" @cancel="cancelFn">
+            <div class="picker" v-if="!hideSlot">
                 <span class="title">{{title||'省市区选择器：'}}</span>
                 <span class="value">{{regionValue}}</span>
             </div>
-            <div
-                class="picker region"
-                v-else
-            ></div>
+            <div class="picker region" v-else></div>
         </picker>
     </div>
 </template>
-
 <script>
-import {resetData,Type,copyJson} from 'js/yydjs';
+import { resetData, Type, copyJson } from 'js/yydjs';
 
-const resetDataFn=resetData({
-    firstLoaded:false,
-    gangedValue:[],
-    cacheValue:[],
-    cacheRange:[],
-    cacheMultiSelectorValue:[],
+const resetDataFn = resetData({ //需要重置的data属性
+    firstLoaded: false,
+    gangedValue: [],
+    cacheValue: [],
+    cacheRange: [],
+    cacheMultiSelectorValue: [],
 });
 
-export default{
-    data(){
-        return resetDataFn.data;
+export default {
+    data() {
+        return Object.assign({}, resetDataFn.data, {
+
+        });
     },
 
-    computed:{
-        selectorRangeKey(){
-            if(this.mode!='selector')return;
-            let {range,rangeKey}=this;
-            let type=range[0]?Type(range[0]):'string';
-            let selectorRangeKey='';
+    computed: {
+        selectorRangeKey() {
+            if (this.mode != 'selector') return;
+            let { range, rangeKey } = this;
+            let type = range[0] ? Type(range[0]) : 'string';
+            let selectorRangeKey = '';
 
-            if(type=='object'){
-                selectorRangeKey=rangeKey||'name';
+            if (type == 'object') {
+                selectorRangeKey = rangeKey || 'name';
             }
             return selectorRangeKey;
         },
-        selectorValue(){
-            if(this.mode!='selector')return;
-            let {range,value,rangeKey}=this;
-            let type=range[0]?Type(range[0]):'string';
-            let selectorValue='';
+        selectorValue() {
+            if (this.mode != 'selector') return;
+            let { range, value, rangeKey } = this;
+            let type = range[0] ? Type(range[0]) : 'string';
+            let selectorValue = '';
 
-            if(!value&&value!=0){
-                value=0;
+            if (!value && value != 0) {
+                value = 0;
             }
 
-            if(type=='string'){
-                selectorValue=range[value];
-            }else if(type=='object'){
-                selectorValue=range[value][rangeKey];
+            if (type == 'string') {
+                selectorValue = range[value];
+            } else if (type == 'object') {
+                selectorValue = range[value][rangeKey];
             }
             return selectorValue;
         },
-        multiSelectorRangeKey(){
-            if(this.mode!='multiSelector')return;
-            let {range,rangeKey}=this;
-            let type=range[0]&&range[0][0]?Type(range[0][0]):'string';
-            let multiSelectorRangeKey='';
+        multiSelectorRangeKey() {
+            if (this.mode != 'multiSelector') return;
+            let { range, rangeKey } = this;
+            let type = range[0] && range[0][0] ? Type(range[0][0]) : 'string';
+            let multiSelectorRangeKey = '';
 
-            if(type=='object'){
-                multiSelectorRangeKey=rangeKey||'name';
+            if (type == 'object') {
+                multiSelectorRangeKey = rangeKey || 'name';
             }
             return multiSelectorRangeKey;
         },
-        multiSelectorValue(){
-            if(this.mode!='multiSelector')return;
-            let range=copyJson(this.range);
-            let value=copyJson(this.value);
-            let {rangeKey}=this;
-            let type=range[0]&&range[0][0]?Type(range[0][0]):'string';
-            let multiSelectorValue='';
+        multiSelectorValue() {
+            if (this.mode != 'multiSelector') return;
+            let range = copyJson(this.range);
+            let value = copyJson(this.value);
+            let { rangeKey } = this;
+            let type = range[0] && range[0][0] ? Type(range[0][0]) : 'string';
+            let multiSelectorValue = '';
 
-            if(!value.length){
-                value=range.map((item,index)=>0);
+            if (!value.length) {
+                value = range.map((item, index) => 0);
             }
 
-            if(type=='string'){
-                value=value.map((item,index)=>{
-                    return range[index]?range[index][item]:'';
+            if (type == 'string') {
+                value = value.map((item, index) => {
+                    return range[index] ? range[index][item] : '';
                 });
-            }else if(type=='object'){
-                value=value.map((item,index)=>{
-                    return range[index]&&range[index][item]&&range[index][item][this.multiSelectorRangeKey]?range[index][item][this.multiSelectorRangeKey]:'';
+            } else if (type == 'object') {
+                value = value.map((item, index) => {
+                    return range[index] && range[index][item] && range[index][item][this.multiSelectorRangeKey] ? range[index][item][this.multiSelectorRangeKey] : '';
                 });
             }
 
-            multiSelectorValue=value.join('，');
+            multiSelectorValue = value.join('，');
             return multiSelectorValue;
         },
-        timeValue(){
-            if(this.mode!='time')return;
-            let timeValue='';
+        timeValue() {
+            if (this.mode != 'time') return;
+            let timeValue = '';
 
-            timeValue=this.value.split(':').join(this.join||':');
+            timeValue = this.value.split(':').join(this.join || ':');
             return timeValue;
         },
-        dateValue(){
-            if(this.mode!='date')return;
-            let dateValue='';
+        dateValue() {
+            if (this.mode != 'date') return;
+            let dateValue = '';
 
-            dateValue=this.value.split('-').join(this.join||'-');
+            dateValue = this.value.split('-').join(this.join || '-');
             return dateValue;
         },
-        regionValue(){
-            if(this.mode!='region')return;
-            let regionValue='';
+        regionValue() {
+            if (this.mode != 'region') return;
+            let regionValue = '';
 
-            regionValue=this.value.join(this.join||'-');
+            regionValue = this.value.join(this.join || '-');
             return regionValue;
         },
     },
@@ -372,95 +292,95 @@ export default{
         }
     */
 
-    props:{
-        mode:{//分别是普通选择器('selector')，多列选择器('multiSelector')，时间选择器('time')，日期选择器('date')，省市区选择器('region')
-            type:String,
-            default:'selector',
+    props: {
+        mode: { //分别是普通选择器('selector')，多列选择器('multiSelector')，时间选择器('time')，日期选择器('date')，省市区选择器('region')
+            type: String,
+            default: 'selector',
         },
-        title:{//title名
-            type:String,
-            default:'',
+        title: { //title名
+            type: String,
+            default: '',
         },
-        range:{
+        range: {
             //普通选择器('selector')，mode为 selector 或 multiSelector 时，range 有效
             //多列选择器('multiSelector')，mode为 selector 或 multiSelector 时，range 有效。二维数组，长度表示多少列，数组的每项表示每列的数据，如[["a","b"], ["c","d"]]
-            type:[Array,Object],
-            default:[],
+            type: [Array, Object],
+            default: [],
         },
-        rangeKey:{
+        rangeKey: {
             //普通选择器('selector')，当 range 是一个 Object Array 时，通过 range-key 来指定 Object 中 key 的值作为选择器显示内容
             //多列选择器('multiSelector')，当 range 是一个 二维Object Array 时，通过 range-key 来指定 Object 中 key 的值作为选择器显示内容
-            type:String,
-            default:'name',
+            type: String,
+            default: 'name',
         },
-        value:{
+        value: {
             //普通选择器('selector')，value 的值表示选择了 range 中的第几个（下标从 0 开始），Number
             //多列选择器('multiSelector')，value 每一项的值表示选择了 range 对应项中的第几个（下标从 0 开始），Array
             //时间选择器('time')，表示选中的时间，格式为"hh:mm"，String
             //日期选择器('date')，表示选中的日期，格式为"YYYY-MM-DD"，String
             //省市区选择器('region')，表示选中的省市区，默认选中每一列的第一个值，Array
-            type:[Number,String,Array],
-            default:null,
+            type: [Number, String, Array],
+            default: null,
         },
-        start:{
+        start: {
             //时间选择器('time')，表示有效时间范围的开始，字符串格式为"hh:mm"
             //日期选择器('date')，表示有效日期范围的开始，字符串格式为"YYYY-MM-DD"
-            type:String,
-            default:'',
+            type: String,
+            default: '',
         },
-        end:{
+        end: {
             //时间选择器('time')，表示有效时间范围的结束，字符串格式为"hh:mm"
             //日期选择器('date')，表示有效日期范围的结束，字符串格式为"YYYY-MM-DD"
-            type:String,
-            default:'',
+            type: String,
+            default: '',
         },
-        fields:{
+        fields: {
             //日期选择器('date')，有效值 year,month,day，表示选择器的粒度
-            type:String,
-            default:'day',
+            type: String,
+            default: 'day',
         },
-        join:{
+        join: {
             //省市区选择器('region')，连接符号
-            type:String,
-            default:'',
+            type: String,
+            default: '',
         },
-        customItem:{
+        customItem: {
             //省市区选择器('region')，可为每一列的顶部添加一个自定义的项
-            type:String,
-            default:'',
+            type: String,
+            default: '',
         },
-        ganged:{
+        ganged: {
             //多列选择器('multiSelector')，是否是联动
-            type:Boolean,
-            default:false,
+            type: Boolean,
+            default: false,
         },
-        hideSlot:{//隐藏该组件的slot，需要设置高度，自己根据change事件的返回值设置显示的字段
-            type:Boolean,
-            default:false,
+        hideSlot: { //隐藏该组件的slot，需要设置高度，自己根据change事件的返回值设置显示的字段
+            type: Boolean,
+            default: false,
         },
-        disabled:{//是否禁用
-            type:Boolean,
-            default:false,
+        disabled: { //是否禁用
+            type: Boolean,
+            default: false,
         },
-        change:{//value 改变时触发 change 事件，会返回一个函数changeFn，需要传入参数
+        change: { //value 改变时触发 change 事件，会返回一个函数changeFn，需要传入参数
             /*
                 parent,//父组件的this
                 valueName,//该组件绑定父组件的value名
                 rangeName,//该组件绑定父组件的range名
             */
-            type:Function,
-            default:()=>{},
+            type: Function,
+            default: () => {},
         },
-        cancel:{//取消选择时触发
+        cancel: { //取消选择时触发
             /*
                 parent,//父组件的this
                 valueName,//该组件绑定父组件的value名
                 rangeName,//该组件绑定父组件的range名
             */
-            type:Function,
-            default:()=>{},
+            type: Function,
+            default: () => {},
         },
-        columnchange:{
+        columnchange: {
             //多列选择器('multiSelector')，某一列的值改变时触发 columnchange 事件
             /*
                 parent,//父组件的this
@@ -469,168 +389,169 @@ export default{
                 rangeLength,//联动数组的长度
                 apiFn,//根据业务进行改造，请求接口的封装，第一个参数为接收的id，第二个为获取数据成功的回调函数
             */
-            type:Function,
-            default:()=>{},
+            type: Function,
+            default: () => {},
         },
     },
 
-    onHide(){
+    onHide() {
         //重置data
         resetDataFn.reset(this);
     },
 
-    onLoad(){
+    onLoad() {
         //多列选择器联动设置默认数据
         this.setDefaultData();
     },
 
-    updated(){
+    updated() {
         //多列选择器联动设置默认数据
         this.setDefaultData();
     },
 
-    methods:{
-        setDefaultData(){
-            if(this.ganged&&!this.firstLoaded&&this.range&&this.range.length){
-                this.firstLoaded=true;
-                this.gangedValue=copyJson(this.value);
-                this.cacheValue=copyJson(this.value);
-                this.cacheRange=copyJson(this.range);
-                this.cacheMultiSelectorValue=copyJson(this.multiSelectorValue);
+    methods: {
+        setDefaultData() {
+            if (this.ganged && !this.firstLoaded && this.range && this.range.length) {
+                this.firstLoaded = true;
+                this.gangedValue = copyJson(this.value);
+                this.cacheValue = copyJson(this.value);
+                this.cacheRange = copyJson(this.range);
+                this.cacheMultiSelectorValue = copyJson(this.multiSelectorValue);
             }
         },
-        changeFn(ev){
-            let {value}=ev.mp.detail;
+        changeFn(ev) {
+            let { value } = ev.mp.detail;
 
-            const changeValue=(parent,valueName,rangeName)=>{
-                if(parent&&valueName){
-                    if(!this.ganged){
-                        parent[valueName]=value;
-                    }else{
-                        this.cacheValue=copyJson(this.gangedValue);
-                        this.cacheRange=copyJson(this.range);
-                        this.cacheMultiSelectorValue=copyJson(this.multiSelectorValue);
+            const changeValue = (parent, valueName, rangeName) => {
+                if (parent && valueName) {
+                    if (!this.ganged) {
+                        parent[valueName] = value;
+                    } else {
+                        this.cacheValue = copyJson(this.gangedValue);
+                        this.cacheRange = copyJson(this.range);
+                        this.cacheMultiSelectorValue = copyJson(this.multiSelectorValue);
                     }
                 }
 
-                let resData={};
+                let resData = {};
 
-                resData.value=Type(value)=='string'&&Type(+value)!='nan'?+value:copyJson(value);
-                resData.range=copyJson(this.range);
-                resData.detail=ev.mp.detail;
-                resData.ev=ev;
+                resData.value = Type(value) == 'string' && Type(+value) != 'nan' ? +value : copyJson(value);
+                resData.range = copyJson(this.range);
+                resData.detail = ev.mp.detail;
+                resData.ev = ev;
 
-                switch(this.mode){
+                switch (this.mode) {
                     case 'selector':
-                            resData.strValue=this.selectorValue;
+                        resData.strValue = this.selectorValue;
                         break;
                     case 'multiSelector':
-                            if(this.ganged){
-                                resData.strValue=this.cacheMultiSelectorValue;
-                                resData.range=copyJson(this.cacheRange);
-                            }else{
-                                resData.strValue=this.multiSelectorValue;
-                            }
+                        if (this.ganged) {
+                            resData.strValue = this.cacheMultiSelectorValue;
+                            resData.range = copyJson(this.cacheRange);
+                        } else {
+                            resData.strValue = this.multiSelectorValue;
+                        }
                         break;
                     case 'time':
-                            resData.strValue=this.timeValue;
+                        resData.strValue = this.timeValue;
                         break;
                     case 'date':
-                            resData.strValue=this.dateValue;
+                        resData.strValue = this.dateValue;
                         break;
                     case 'region':
-                            resData.strValue=this.regionValue;
+                        resData.strValue = this.regionValue;
                         break;
                 }
                 return resData;
             };
-            this.change&&this.change(changeValue);
+            this.change && this.change(changeValue);
         },
-        cancelFn(){
-            const cancelValue=(parent,valueName,rangeName)=>{
-                if(parent&&valueName){
-                    if(this.ganged){
-                        this.gangedValue=copyJson(this.cacheValue);
-                        parent[valueName]=copyJson(this.cacheValue);
-                        parent[rangeName]=copyJson(this.cacheRange);
+        cancelFn() {
+            const cancelValue = (parent, valueName, rangeName) => {
+                if (parent && valueName) {
+                    if (this.ganged) {
+                        this.gangedValue = copyJson(this.cacheValue);
+                        parent[valueName] = copyJson(this.cacheValue);
+                        parent[rangeName] = copyJson(this.cacheRange);
                     }
                 }
             };
-            this.cancel&&this.cancel(cancelValue);
+            this.cancel && this.cancel(cancelValue);
         },
-        columnchangeFn(ev){
-            let {column,value}=ev.mp.detail;
+        columnchangeFn(ev) {
+            let { column, value } = ev.mp.detail;
 
-            const changeArray=(parent,valueName,rangeName,rangeLength=0,apiFn)=>{
-                if(parent&&rangeName&&parent[rangeName]&&apiFn&&Type(apiFn)=='function'){
-                    let parentRange=copyJson(parent[rangeName]);
-                    let parentValue=copyJson(parent[valueName]);
-                    let id=parentRange[column][value].id;
+            const changeArray = (parent, valueName, rangeName, rangeLength = 0, apiFn) => {
+                if (parent && rangeName && parent[rangeName] && apiFn && Type(apiFn) == 'function') {
+                    let parentRange = copyJson(parent[rangeName]);
+                    let parentValue = copyJson(parent[valueName]);
+                    let id = parentRange[column][value].id;
 
-                    const setParent=(value)=>{
-                        parentRange.length=rangeLength;
-                        parentValue.length=rangeLength;
+                    const setParent = (value) => {
+                        parentRange.length = rangeLength;
+                        parentValue.length = rangeLength;
 
-                        for(let i=0;i<parentValue.length;i++){
-                            let item=parentValue[i];
+                        for (let i = 0; i < parentValue.length; i++) {
+                            let item = parentValue[i];
 
-                            if(!item&&item!=0){
-                                parentValue[i]=0;
+                            if (!item && item != 0) {
+                                parentValue[i] = 0;
                             }
                         }
 
-                        this.gangedValue=copyJson(parentValue);
+                        this.gangedValue = copyJson(parentValue);
 
-                        for(let i=0;i<parentValue.length;i++){
-                            let item=parentValue[i];
+                        for (let i = 0; i < parentValue.length; i++) {
+                            let item = parentValue[i];
 
-                            if(!parentRange[i][item]){
-                                parentValue[i]=0;
+                            if (!parentRange[i][item]) {
+                                parentValue[i] = 0;
                             }
                         }
 
-                        setTimeout(()=>{
-                            parent[valueName]=copyJson(parentValue);
-                            parent[rangeName]=copyJson(parentRange);
-                        },100);
+                        setTimeout(() => {
+                            parent[valueName] = copyJson(parentValue);
+                            parent[rangeName] = copyJson(parentRange);
+                        }, 100);
                     };
 
-                    if(parent[rangeName][column+1]){
-                        const reqFn=(id,column,value)=>{
-                            apiFn(id,(res)=>{
-                                parentValue[column]=value;
-                                parentRange[column+1]=res;
+                    if (parent[rangeName][column + 1]) {
+                        const reqFn = (id, column, value) => {
+                            apiFn(id, (res) => {
+                                parentValue[column] = value;
+                                parentRange[column + 1] = res;
 
-                                if(column+1<rangeLength-1&&Type(rangeLength)=='number'){
-                                    let valueIndex=parentValue[column+1]||0;
-                                    let id=parentRange[column+1][valueIndex].id;
+                                if (column + 1 < rangeLength - 1 && Type(rangeLength) == 'number') {
+                                    let valueIndex = parentValue[column + 1] || 0;
+                                    let id = parentRange[column + 1][valueIndex].id;
 
-                                    if(id){
-                                        reqFn(id,column+1,valueIndex);
+                                    if (id) {
+                                        reqFn(id, column + 1, valueIndex);
                                     }
-                                }else{
+                                } else {
                                     setParent(value);
                                 }
                             });
                         };
 
-                        reqFn(id,column,value);
-                    }else{
-                        parentValue[column]=value||0;
+                        reqFn(id, column, value);
+                    } else {
+                        parentValue[column] = value || 0;
                         setParent(value);
                     }
                 }
             };
-            this.columnchange&&this.columnchange(changeArray);
+            this.columnchange && this.columnchange(changeArray);
         },
     },
 }
-</script>
 
+</script>
 <style lang="scss" scoped>
-    .pickerWrap{
-        .picker{
-            min-height: 30rpx;
-        }
+.pickerWrap {
+    .picker {
+        min-height: 30rpx;
     }
+}
+
 </style>

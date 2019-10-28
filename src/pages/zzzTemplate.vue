@@ -1,42 +1,41 @@
 <template>
     <div class="name">
-
     </div>
 </template>
-
 <script>
-import {resetData} from 'js/yydjs';
+import { resetData } from 'js/yydjs';
 
-const resetDataFn=resetData({
+const resetDataFn = resetData({ //需要重置的data属性
 
 });
 
-export default{
-    data(){
-        return resetDataFn.data;
+export default {
+    data() {
+        return Object.assign({}, resetDataFn.data, {
+
+        });
     },
 
-    onHide(){
+    onHide() {
         //重置data
         resetDataFn.reset(this);
     },
 
-    onShow(){
+    onShow() {
 
     },
 
-    methods:{
+    methods: {
 
     },
 
-    components:{
+    components: {
 
     },
 }
+
 </script>
-
 <style lang="scss" scoped>
-    .name{
+.name {}
 
-    }
 </style>
