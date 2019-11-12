@@ -1,5 +1,13 @@
 {
     "pages": [],
+    "style": "v2",
+    "permission":
+    {
+        "scope.userLocation":
+        {
+            "desc": "位置信息"
+        }
+    },
     "window":
     {
         "backgroundTextStyle": "light",
@@ -24,5 +32,12 @@
             "iconPath": "static/images/user-icon.png",
             "selectedIconPath": "static/images/user-active-icon.png"
         }]
-    }
+    },
+    "networkTimeout":
+    {
+        "request": 10000,
+        "downloadFile": 10000
+    },
+    "debug": true,
+    "navigateToMiniProgramAppIdList": ["wx3e537ff35bec6691"]
 }
