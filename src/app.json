@@ -1,6 +1,11 @@
 {
     "pages": [],
-    "style": "v2",
+    "debug": true,
+    "networkTimeout":
+    {
+        "request": 10000,
+        "downloadFile": 10000
+    },
     "permission":
     {
         "scope.userLocation":
@@ -23,21 +28,14 @@
         {
             "pagePath": "pages/home/home",
             "text": "首页",
-            "iconPath": "static/images/home-icon.png",
-            "selectedIconPath": "static/images/home-active-icon.png"
+            "iconPath": "static/tabs/home-icon.png",
+            "selectedIconPath": "static/tabs/home-active-icon.png"
         },
         {
             "pagePath": "pages/user/user",
             "text": "我的",
-            "iconPath": "static/images/user-icon.png",
-            "selectedIconPath": "static/images/user-active-icon.png"
+            "iconPath": "static/tabs/user-icon.png",
+            "selectedIconPath": "static/tabs/user-active-icon.png"
         }]
-    },
-    "networkTimeout":
-    {
-        "request": 10000,
-        "downloadFile": 10000
-    },
-    "debug": true,
-    "navigateToMiniProgramAppIdList": ["wx3e537ff35bec6691"]
+    }
 }

@@ -548,6 +548,8 @@ export default {
 
 </script>
 <style lang="scss" scoped>
+@import '~css/public.scss';
+
 .pickerWrap {
     .picker {
         min-height: 30rpx;

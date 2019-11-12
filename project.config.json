@@ -6,6 +6,8 @@
 		"postcss": true,
 		"minified": true,
 		"newFeature": true,
+		"coverView": true,
+		"autoAudits": false,
 		"checkInvalidKey": true,
 		"checkSiteMap": true,
 		"uploadWithSourceMap": true,
@@ -15,7 +17,7 @@
 			"outputPath": ""
 		}
 	},
-	"miniprogramRoot": "dist/",
+	"miniprogramRoot": "dist/wx/",
 	"compileType": "miniprogram",
 	"appid": "wx3e537ff35bec6691",
 	"projectname": "yyd-mpvue",

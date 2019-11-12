@@ -121,6 +121,8 @@ export default {
 
 </script>
 <style lang="scss" scoped>
+@import '~css/public.scss';
+
 .swiperWrap {
     .swiper, .img {
         width: 100%;
