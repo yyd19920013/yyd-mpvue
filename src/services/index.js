@@ -9,14 +9,12 @@ const API = (config) => {
 };
 
 //axios请求示例
-const testWxRequest = (data, endFn) => {
+const testWxRequest = (data, success) => {
     API({
         url: URL + '/action2/AllProvince.ashx',
         method: 'post',
-        data: data,
-        success: (res) => {
-            endFn && endFn(res);
-        },
+        data,
+        success,
     });
 };
 
