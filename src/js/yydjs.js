@@ -26,6 +26,36 @@ function copyJson(json) {
     return json ? JSON.parse(JSON.stringify(json)) : json;
 };
 
+//时间变成两位数
+function toTwo(n) {
+    return +n < 10 ? '0' + n : n + '';
+};
+
+//补零函数
+//value（需要补零的值）
+//length（需要补零的长度(数量)）
+//isBehind（是否在末尾补零）
+function zeroFill(value, length, isBehind) {
+    var value = value || '';
+    var length = length > 0 ? length : 0;
+    var zeroStr = '';
+
+    for (var i = 0; i < length; i++) {
+        zeroStr += '0';
+    }
+
+    return !isBehind ? zeroStr + value : value + zeroStr;
+};
+
+//算出本月天数
+//getMonth获得的月份是从0开始，要加1
+//下月第0天就是最后一天，-1=倒数第二天，国外月份从0开始,逗号隔开年月日new Date之后月份要大一个月，字符串是正常的
+function manyDay(year, month) {
+    var nextMonth = new Date(year, month, 0);
+
+    return nextMonth.getDate();
+};
+
 //正常化日期
 function normalDate(oDate) {
     var oDate = oDate;
