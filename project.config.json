@@ -23,7 +23,7 @@
 	"miniprogramRoot": "dist/wx/",
 	"compileType": "miniprogram",
 	"appid": "wxc49f70991d742d55",
-	"projectname": "mp-ih-patient-code",
+	"projectname": "yyd-mpvue",
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
 	"condition": {
