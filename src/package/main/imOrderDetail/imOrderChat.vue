@@ -751,8 +751,13 @@ export default {
             setTimeout(() => {
                 //console.log(copyJson(res));
                 let { scene, to } = this.nimChat;
+                let { conStatus, orderStatus } = this.orderDetail;
+                let conStatusArr = ['12', '15', '45', '53', '57'];
+                let orderStatusArr = ['05', '03'];
+                let condition = ~conStatusArr.indexOf(conStatus) || ~orderStatusArr.indexOf(orderStatus);
 
                 if (!scene || !to) return;
+                if (condition) return;
                 this.isScrollBottom = true;
                 for (let attr in res) {
                     let item = res[attr];
