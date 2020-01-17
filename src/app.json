@@ -1,6 +1,8 @@
 {
     "pages": [],
-    "debug": true,
+    "preloadRule":
+    {},
+    "debug": false,
     "networkTimeout":
     {
         "request": 10000,
@@ -10,7 +12,7 @@
     {
         "scope.userLocation":
         {
-            "desc": "位置信息"
+            "desc": "我们需要通过您的地理位置信息为您推荐就近的自提药店"
         }
     },
     "window":
@@ -26,16 +28,16 @@
         "selectedColor": "#09f",
         "list": [
         {
-            "pagePath": "pages/home/home",
+            "pagePath": "pages/home/index",
             "text": "首页",
-            "iconPath": "static/tabs/home-icon.png",
-            "selectedIconPath": "static/tabs/home-active-icon.png"
+            "iconPath": "static/images/tabs/home-icon.png",
+            "selectedIconPath": "static/images/tabs/home-active-icon.png"
         },
         {
-            "pagePath": "pages/user/user",
+            "pagePath": "pages/user/index",
             "text": "我的",
-            "iconPath": "static/tabs/user-icon.png",
-            "selectedIconPath": "static/tabs/user-active-icon.png"
+            "iconPath": "static/images/tabs/user-icon.png",
+            "selectedIconPath": "static/images/tabs/user-active-icon.png"
         }]
     }
 }

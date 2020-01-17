@@ -3,30 +3,31 @@
     </div>
 </template>
 <script>
-import { resetData } from 'js/yydjs';
-
-const resetDataFn = resetData({ //需要重置的data属性
-
-});
+import {} from 'js/yydjs';
 
 export default {
     data() {
-        return Object.assign({}, resetDataFn.data, {
+        return {
 
-        });
-    },
-
-    onHide() {
-        //重置data
-        resetDataFn.reset(this);
+        };
     },
 
     onShow() {
 
     },
 
-    methods: {
+    onHide() { //为保证每次离开都触发，需写在leaveFn
+        this.leaveFn();
+    },
 
+    onUnload() { //为保证每次离开都触发，需写在leaveFn
+        this.leaveFn();
+    },
+
+    methods: {
+        leaveFn() { //onHide和onUnload只会触发一个，如果是onHide可能需要重置data属性
+
+        },
     },
 
     components: {
@@ -38,6 +39,9 @@ export default {
 <style lang="scss" scoped>
 @import '~css/public.scss';
 
-.name {}
+.name {
+    @include styleInit;
+    /deep/ & {}
+}
 
 </style>

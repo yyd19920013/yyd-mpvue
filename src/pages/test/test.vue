@@ -16,6 +16,7 @@
             ]">
             <div>111111111111111</div>
         </swiperWrap>
+        <input v-model="text" placeholder="请输入" />
         <pickerWrap :mode="'selector'" :range="['美国','中国','巴西','日本']" :value="index1" :change="changeFn1" />
         <pickerWrap :mode="'selector'" :range="[{id:0,name:'美国'},{id:1,name:'中国'},{id:2,name:'巴西'},{id:3,name:'日本'}]" :value="index11" :change="changeFn11" />
         <pickerWrap :mode="'multiSelector'" :range="[['无脊柱动物','脊柱动物'],['扁性动物','线形动物','环节动物','软体动物','节肢动物'],['猪肉绦虫','吸血虫']]" :value="arrIndex2" :change="changeFn2" />
@@ -26,46 +27,38 @@
         <div :animation="animationData" class="animationData">
             <button @click="clickFn">回首页</button>
         </div>
-        <van-button type="primary">主要按钮</van-button>
+        <van-button type="primary">主要按钮1</van-button>
+        <imgWrap src="bg/bg_user.png" />
+        <button type="button" @click="wxSubscribeFn">订阅消息</button>
     </div>
 </template>
 <script>
 import swiperWrap from 'components/swiperWrap';
 import pickerWrap from 'components/pickerWrap';
-import { wxGetLocation, wxAnimation, resetData, copyJson, wxToast } from 'js/yydjs';
-import { testWxRequest } from 'services';
-
-const resetDataFn = resetData({ //需要重置的data属性
-    dataList: [],
-    index1: 0,
-    index11: 0,
-    arrIndex2: [],
-    arrIndex22: [],
-    gangedArr: [],
-    gangedArrIndex: [],
-    time: '',
-    date: '',
-    region: [],
-    animationData: {},
-});
+import imgWrap from 'components/imgWrap';
+import { wxGetLocation, wxAnimation, copyJson, wxToast, wxSubscribe1 } from 'js/yydjs';
+import {} from 'services';
 
 export default {
     data() {
-        return Object.assign({}, resetDataFn.data, {
+        return {
+            dataList: [],
+            index1: 0,
+            index11: 0,
+            arrIndex2: [],
+            arrIndex22: [],
+            gangedArr: [],
+            gangedArrIndex: [],
+            time: '',
+            date: '',
+            region: [],
+            animationData: {},
 
-        });
+            text: '文字',
+        };
     },
 
-    onHide() {
-        //重置data
-        resetDataFn.reset(this);
-    },
-
-    onShow() {
-        testWxRequest([], (res) => {
-            console.log(res);
-        });
-
+    onShow(option) {
         let gangedArr = [];
         this.mockGangedArr(null, (res) => {
             gangedArr.push(res);
@@ -93,13 +86,29 @@ export default {
             },
         });
 
-        wxToast('提示');
+        // wxToast('提示');
+
+        console.log('query', this.$query);
+    },
+
+    onHide() { //为保证每次离开都触发，需写在leaveFn
+        this.leaveFn();
+    },
+
+    onUnload() { //为保证每次离开都触发，需写在leaveFn
+        this.leaveFn();
     },
 
     methods: {
+        leaveFn() { //onHide和onUnload只会触发一个，如果是onHide可能需要重置data属性
+
+        },
+        wxSubscribeFn() {
+            wxSubscribe1();
+        },
         clickFn() {
             wx.switchTab({
-                url: '../home/home',
+                url: '../home/index',
             });
         },
         changeFn1(changeValue) {
@@ -183,6 +192,7 @@ export default {
     components: {
         swiperWrap,
         pickerWrap,
+        imgWrap,
     },
 }
 
@@ -190,6 +200,9 @@ export default {
 <style lang="scss" scoped>
 @import '~css/public.scss';
 
-.test {}
+.test {
+    @include styleInit;
+    /deep/ & {}
+}
 
 </style>

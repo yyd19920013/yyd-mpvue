@@ -1,37 +1,42 @@
 <template>
     <div class="pickerWrap">
-        <picker v-if="mode=='selector'" mode="selector" :value="value" :rangeKey="selectorRangeKey" :range="range" :disabled="disabled" @change="changeFn" @cancel="cancelFn">
-            <div class="picker" v-if="!hideSlot">
+        <picker v-if="mode=='selector'" mode="selector" :value="value" :rangeKey="selectorRangeKey" :range="range" :disabled="disabled" class="picker" @change="changeFn" @cancel="cancelFn">
+            <div class="pickerText" v-if="!hideSlot">
                 <span class="title">{{title||'普通选择器：'}}</span>
-                <span class="value">{{selectorValue}}</span>
+                <span v-if="selectorValue" class="value">{{selectorValue}}</span>
+                <span v-else class="hint">{{placeholder}}</span>
             </div>
             <div class="picker selector" v-else></div>
         </picker>
-        <picker v-if="mode=='multiSelector'" mode="multiSelector" :value="!ganged?value:gangedValue" :rangeKey="multiSelectorRangeKey" :range="range" :disabled="disabled" @change="changeFn" @columnchange="columnchangeFn" @cancel="cancelFn">
-            <div class="picker" v-if="!hideSlot">
+        <picker v-if="mode=='multiSelector'" mode="multiSelector" :value="!ganged?value:gangedValue" :rangeKey="multiSelectorRangeKey" :range="range" :disabled="disabled" class="picker" @change="changeFn" @columnchange="columnchangeFn" @cancel="cancelFn">
+            <div class="pickerText" v-if="!hideSlot">
                 <span class="title">{{title||'多列选择器：'}}</span>
-                <span class="value">{{!ganged?multiSelectorValue:cacheMultiSelectorValue}}</span>
+                <span v-if="!ganged?multiSelectorValue:cacheMultiSelectorValue" class="value">{{!ganged?multiSelectorValue:cacheMultiSelectorValue}}</span>
+                <span v-else class="hint">{{placeholder}}</span>
             </div>
             <div class="picker multiSelector" v-else></div>
         </picker>
-        <picker v-if="mode=='time'" mode="time" :value="value" :start="start" :end="end" :disabled="disabled" @change="changeFn" @cancel="cancelFn">
-            <div class="picker" v-if="!hideSlot">
+        <picker v-if="mode=='time'" mode="time" :value="value" :start="start" :end="end" :disabled="disabled" class="picker" @change="changeFn" @cancel="cancelFn">
+            <div class="pickerText" v-if="!hideSlot">
                 <span class="title">{{title||'时间选择器：'}}</span>
-                <span class="value">{{timeValue}}</span>
+                <span v-if="timeValue" class="value">{{timeValue}}</span>
+                <span v-else class="hint">{{placeholder}}</span>
             </div>
             <div class="picker time" v-else></div>
         </picker>
-        <picker v-if="mode=='date'" mode="date" :value="value" :start="start" :end="end" :flieds="flieds" :disabled="disabled" @change="changeFn" @cancel="cancelFn">
-            <div class="picker" v-if="!hideSlot">
+        <picker v-if="mode=='date'" mode="date" :value="value" :start="start" :end="end" :flieds="flieds" :disabled="disabled" class="picker" @change="changeFn" @cancel="cancelFn">
+            <div class="pickerText" v-if="!hideSlot">
                 <span class="title">{{title||'日期选择器：'}}</span>
-                <span class="value">{{dateValue}}</span>
+                <span v-if="dateValue" class="value">{{dateValue}}</span>
+                <span v-else class="hint">{{placeholder}}</span>
             </div>
             <div class="picker date" v-else></div>
         </picker>
-        <picker v-if="mode=='region'" mode="region" :value="value" :join="join" :customItem="customItem" :disabled="disabled" @change="changeFn" @cancel="cancelFn">
-            <div class="picker" v-if="!hideSlot">
+        <picker v-if="mode=='region'" mode="region" :value="value" :join="join" :customItem="customItem" :disabled="disabled" class="picker" @change="changeFn" @cancel="cancelFn">
+            <div class="pickerText" v-if="!hideSlot">
                 <span class="title">{{title||'省市区选择器：'}}</span>
-                <span class="value">{{regionValue}}</span>
+                <span v-if="regionValue" class="value">{{regionValue}}</span>
+                <span v-else class="hint">{{placeholder}}</span>
             </div>
             <div class="picker region" v-else></div>
         </picker>
@@ -57,89 +62,25 @@ export default {
 
     computed: {
         selectorRangeKey() {
-            if (this.mode != 'selector') return;
-            let { range, rangeKey } = this;
-            let type = range[0] ? Type(range[0]) : 'string';
-            let selectorRangeKey = '';
-
-            if (type == 'object') {
-                selectorRangeKey = rangeKey || 'name';
-            }
-            return selectorRangeKey;
+            return this.selectorRangeKeyFn();
         },
         selectorValue() {
-            if (this.mode != 'selector') return;
-            let { range, value, rangeKey } = this;
-            let type = range[0] ? Type(range[0]) : 'string';
-            let selectorValue = '';
-
-            if (!value && value != 0) {
-                value = 0;
-            }
-
-            if (type == 'string') {
-                selectorValue = range[value];
-            } else if (type == 'object') {
-                selectorValue = range[value][rangeKey];
-            }
-            return selectorValue;
+            return this.selectorValueFn();
         },
         multiSelectorRangeKey() {
-            if (this.mode != 'multiSelector') return;
-            let { range, rangeKey } = this;
-            let type = range[0] && range[0][0] ? Type(range[0][0]) : 'string';
-            let multiSelectorRangeKey = '';
-
-            if (type == 'object') {
-                multiSelectorRangeKey = rangeKey || 'name';
-            }
-            return multiSelectorRangeKey;
+            return this.multiSelectorRangeKeyFn();
         },
         multiSelectorValue() {
-            if (this.mode != 'multiSelector') return;
-            let range = copyJson(this.range);
-            let value = copyJson(this.value);
-            let { rangeKey } = this;
-            let type = range[0] && range[0][0] ? Type(range[0][0]) : 'string';
-            let multiSelectorValue = '';
-
-            if (!value.length) {
-                value = range.map((item, index) => 0);
-            }
-
-            if (type == 'string') {
-                value = value.map((item, index) => {
-                    return range[index] ? range[index][item] : '';
-                });
-            } else if (type == 'object') {
-                value = value.map((item, index) => {
-                    return range[index] && range[index][item] && range[index][item][this.multiSelectorRangeKey] ? range[index][item][this.multiSelectorRangeKey] : '';
-                });
-            }
-
-            multiSelectorValue = value.join('，');
-            return multiSelectorValue;
+            return this.multiSelectorValueFn();
         },
         timeValue() {
-            if (this.mode != 'time') return;
-            let timeValue = '';
-
-            timeValue = this.value.split(':').join(this.join || ':');
-            return timeValue;
+            return this.timeValueFn();
         },
         dateValue() {
-            if (this.mode != 'date') return;
-            let dateValue = '';
-
-            dateValue = this.value.split('-').join(this.join || '-');
-            return dateValue;
+            return this.dateValueFn();
         },
         regionValue() {
-            if (this.mode != 'region') return;
-            let regionValue = '';
-
-            regionValue = this.value.join(this.join || '-');
-            return regionValue;
+            return this.regionValueFn();
         },
     },
 
@@ -322,6 +263,10 @@ export default {
             type: [Number, String, Array],
             default: null,
         },
+        placeholder: { //提示文字
+            type: String,
+            default: '请选择',
+        },
         start: {
             //时间选择器('time')，表示有效时间范围的开始，字符串格式为"hh:mm"
             //日期选择器('date')，表示有效日期范围的开始，字符串格式为"YYYY-MM-DD"
@@ -394,22 +339,33 @@ export default {
         },
     },
 
-    onHide() {
-        //重置data
-        resetDataFn.reset(this);
+    onLoad() { //为保证每次进入都触发，需写在enterFn
+        this.enterFn();
     },
 
-    onLoad() {
-        //多列选择器联动设置默认数据
-        this.setDefaultData();
+    onShow() { //为保证每次进入都触发，需写在enterFn
+        this.enterFn();
     },
 
-    updated() {
-        //多列选择器联动设置默认数据
-        this.setDefaultData();
+    onHide() { //为保证每次离开都触发，需写在leaveFn
+        this.leaveFn();
+    },
+
+    onUnload() { //为保证每次离开都触发，需写在leaveFn
+        this.leaveFn();
     },
 
     methods: {
+        enterFn() { //onLoad和onShow可能会一起触发，所以需要防止重复触发
+            if (this.isEnter) return '';
+            this.isEnter = true;
+
+            //多列选择器联动设置默认数据
+            this.setDefaultData();
+        },
+        leaveFn() { //onHide和onUnload只会触发一个，如果是onHide可能需要重置data属性
+            resetDataFn.reset(this);
+        },
         setDefaultData() {
             if (this.ganged && !this.firstLoaded && this.range && this.range.length) {
                 this.firstLoaded = true;
@@ -418,6 +374,99 @@ export default {
                 this.cacheRange = copyJson(this.range);
                 this.cacheMultiSelectorValue = copyJson(this.multiSelectorValue);
             }
+        },
+        selectorRangeKeyFn() {
+            if (this.mode != 'selector') return '';
+            let { range, rangeKey } = this;
+            let type = range[0] ? Type(range[0]) : 'string';
+            let selectorRangeKey = '';
+
+            if (type == 'object') {
+                selectorRangeKey = rangeKey || 'name';
+            }
+            return selectorRangeKey;
+        },
+        selectorValueFn(val) {
+            if (this.mode != 'selector') return '';
+            let { range, value, rangeKey } = this;
+            let type = range[0] ? Type(range[0]) : 'string';
+            let selectorValue = '';
+
+            if (val) value = val;
+            if (!value && value != 0) {
+                value = 0;
+            }
+
+            if (type == 'string') {
+                selectorValue = range[value];
+            } else if (type == 'object') {
+                selectorValue = range[value][rangeKey];
+            }
+            return selectorValue;
+        },
+        multiSelectorRangeKeyFn() {
+            if (this.mode != 'multiSelector') return '';
+            let { range, rangeKey } = this;
+            let type = range[0] && range[0][0] ? Type(range[0][0]) : 'string';
+            let multiSelectorRangeKey = '';
+
+            if (type == 'object') {
+                multiSelectorRangeKey = rangeKey || 'name';
+            }
+            return multiSelectorRangeKey;
+        },
+        multiSelectorValueFn(val) {
+            if (this.mode != 'multiSelector') return '';
+            let range = copyJson(this.range);
+            let value = copyJson(this.value);
+            let { rangeKey } = this;
+            let type = range[0] && range[0][0] ? Type(range[0][0]) : 'string';
+            let multiSelectorValue = '';
+
+            if (val) value = val;
+            if (!value.length) {
+                value = range.map((item, index) => 0);
+            }
+
+            if (type == 'string') {
+                value = value.map((item, index) => {
+                    return range[index] ? range[index][item] : '';
+                });
+            } else if (type == 'object') {
+                value = value.map((item, index) => {
+                    return range[index] && range[index][item] && range[index][item][this.multiSelectorRangeKey] ? range[index][item][this.multiSelectorRangeKey] : '';
+                });
+            }
+
+            multiSelectorValue = value.join('，');
+            return multiSelectorValue;
+        },
+        timeValueFn(val) {
+            if (this.mode != 'time') return '';
+            let timeValue = '';
+            let { value } = this;
+
+            if (val) value = val;
+            timeValue = value.split(':').join(this.join || ':');
+            return timeValue;
+        },
+        dateValueFn(val) {
+            if (this.mode != 'date') return '';
+            let dateValue = '';
+            let { value } = this;
+
+            if (val) value = val;
+            dateValue = value.split('-').join(this.join || '-');
+            return dateValue;
+        },
+        regionValueFn(val) {
+            if (this.mode != 'region') return '';
+            let regionValue = '';
+            let { value } = this;
+
+            if (val) value = val;
+            regionValue = value.join(this.join || '-');
+            return regionValue;
         },
         changeFn(ev) {
             let { value } = ev.mp.detail;
@@ -442,24 +491,24 @@ export default {
 
                 switch (this.mode) {
                     case 'selector':
-                        resData.strValue = this.selectorValue;
+                        resData.strValue = this.selectorValueFn(resData.value);
                         break;
                     case 'multiSelector':
                         if (this.ganged) {
                             resData.strValue = this.cacheMultiSelectorValue;
                             resData.range = copyJson(this.cacheRange);
                         } else {
-                            resData.strValue = this.multiSelectorValue;
+                            resData.strValue = this.multiSelectorValueFn(resData.value);
                         }
                         break;
                     case 'time':
-                        resData.strValue = this.timeValue;
+                        resData.strValue = this.timeValueFn(resData.value);
                         break;
                     case 'date':
-                        resData.strValue = this.dateValue;
+                        resData.strValue = this.dateValueFn(resData.value);
                         break;
                     case 'region':
-                        resData.strValue = this.regionValue;
+                        resData.strValue = this.regionValueFn(resData.value);
                         break;
                 }
                 return resData;
@@ -551,8 +600,14 @@ export default {
 @import '~css/public.scss';
 
 .pickerWrap {
-    .picker {
-        min-height: 30rpx;
+    @include styleInit;
+    /deep/ & {
+        .picker, .pickerText {
+            min-height: 60rpx;
+        }
+        .hint {
+            color: #999;
+        }
     }
 }
 

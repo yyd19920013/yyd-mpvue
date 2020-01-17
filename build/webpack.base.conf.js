@@ -28,7 +28,7 @@ function getEntry(rootSrc) {
 
 const entry = MpvueEntry.getEntry({
   // 页面配置文件
-  pages: 'src/pages.js',
+  pages: 'src/router/index.js',
   // 主入口文件，作为模板
   main: 'src/main.js',
   // 入口模板文件，优先级较高
@@ -62,11 +62,14 @@ let baseWebpackConfig = {
       'src': resolve('src'),
       'components': resolve('src/components'),
       'pages': resolve('src/pages'),
+      'package': resolve('src/package'),
       'services': resolve('src/services'),
       'store': resolve('src/store'),
       'images': resolve('src/images'),
       'css': resolve('src/css'),
       'js': resolve('src/js'),
+      'static': resolve('static'),
+      'store':resolve('src/store'),
     },
     symlinks: false,
     aliasFields: ['mpvue', 'weapp', 'browser'],
@@ -81,6 +84,7 @@ let baseWebpackConfig = {
       {
         test: /\.js$/,
         include: [resolve('src'), resolve('test')],
+        exclude: /NIM_Web_*.*\.js/,
         use: [
           'babel-loader',
           {
@@ -121,7 +125,8 @@ let baseWebpackConfig = {
     new MpvueEntry(),
     new webpack.DefinePlugin({
       'mpvue': 'global.mpvue',
-      'mpvuePlatform': 'global.mpvuePlatform'
+      'mpvuePlatform': 'global.mpvuePlatform',
+      'mpvueRouter': JSON.stringify(require('../src/router/index.js')),
     }),
     new CopyWebpackPlugin([{
       from: path.resolve(__dirname, '../static'),

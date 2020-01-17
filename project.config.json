@@ -7,6 +7,7 @@
 		"minified": true,
 		"newFeature": true,
 		"coverView": true,
+		"nodeModules": false,
 		"autoAudits": false,
 		"checkInvalidKey": true,
 		"checkSiteMap": true,
@@ -15,12 +16,14 @@
 			"ignore": [],
 			"disablePlugins": [],
 			"outputPath": ""
-		}
+		},
+		"showShadowRootInWxmlPanel": true,
+		"scopeDataCheck": false
 	},
 	"miniprogramRoot": "dist/wx/",
 	"compileType": "miniprogram",
-	"appid": "wx3e537ff35bec6691",
-	"projectname": "yyd-mpvue",
+	"appid": "wxc49f70991d742d55",
+	"projectname": "mp-ih-patient-code",
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
 	"condition": {
